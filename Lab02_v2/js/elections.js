@@ -26,7 +26,7 @@ function setMap() {
 
         .parallels([27.00, 44.52])
 
-        .scale(452.52)
+        .scale(500.0)
 
         .translate([width / 2, height / 2]);
 
@@ -71,13 +71,8 @@ function setMap() {
         var lakesFeature = topojson.feature(lakes, lakes.objects.great_lakes_01),
             statesFeature = topojson.feature(states, states.objects.US_States_01).features;
 
-        /*
-        //translate europe TopoJSON
-        var europeCountries = topojson.feature(europe, europe.objects.EuropeCountries),
-            franceRegions = topojson.feature(france, france.objects.FranceRegions).features;
-        */
 
-
+        
         //add states to map
         var lakesPath = map.append("path")
             .datum(topojson.feature(lakes, lakes.objects.great_lakes_01))
@@ -85,19 +80,19 @@ function setMap() {
             .attr("d", path);
 
          //add France regions to map
-         var states = map.selectAll(".states")
+         var statesPath = map.selectAll(".states")
             .data(topojson.feature(states, states.objects.US_States_01).features)
             .enter()
             .append("path")
-            .attr("class", function(d){
-                return "states " + d.properties.adm1_code;
-            })
+            .attr("class", "states")
             .attr("d", path);
     
 
+
+
         //examine the results
-        console.log(lakes);
-        console.log(states);
+        console.log(lakesPath);
+        console.log(statesPath);
     };
 };
 

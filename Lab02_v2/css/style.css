@@ -22,12 +22,21 @@
 
 .lakes {
     fill: #FFF;
-    stroke: #CCC;
+    stroke: #615e5e;
     stroke-width: 2px;
 }
 
 .states {
-    fill: #464343;
-    stroke: #CCC;
+    fill: #CCC;
+    stroke: #615e5e;
     stroke-width: 2px;
+}
+
+body {
+    background-color: white;
+}
+
+.first_paragraph {
+    color: black;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
