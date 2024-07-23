@@ -19,7 +19,7 @@ function setMap() {
         .attr("height", height);
 
     //create Albers equal area conic projection centered on United States
-    var projection = d3.geo.albers()
+    var projection = d3.geoAlbers()
         .center([-0.00, 42.69])
 
         .rotate([101.00, -0.00, 0])
@@ -64,8 +64,8 @@ function setMap() {
             states = data[2];
 
         console.log("pop vote data:",pop_Vote);
-        console.log(lakes);
-        console.log(states);
+        console.log("lakes data:", lakes);
+        console.log("states data:", states);
 
         //translate  TopoJSON
         var lakesFeature = topojson.feature(lakes, lakes.objects.great_lakes_01),
@@ -79,20 +79,20 @@ function setMap() {
 
 
         //add states to map
-        var lakes = map.append("path")
-            .datum(lakes)
+        var lakesPath = map.append("path")
+            .datum(topojson.feature(lakes, lakes.objects.great_lakes_01))
             .attr("class", "lakes")
             .attr("d", path);
 
          //add France regions to map
          var states = map.selectAll(".states")
-         .data(states)
-         .enter()
-         .append("path")
-         .attr("class", function(d){
-             return "states " + d.properties.adm1_code;
-         })
-         .attr("d", path);
+            .data(topojson.feature(states, states.objects.US_States_01).features)
+            .enter()
+            .append("path")
+            .attr("class", function(d){
+                return "states " + d.properties.adm1_code;
+            })
+            .attr("d", path);
     
 
         //examine the results
