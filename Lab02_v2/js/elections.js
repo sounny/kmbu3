@@ -63,6 +63,30 @@ function setMap() {
             lakes = data[1],
             states = data[2];
 
+
+        //create graticule generator
+        var graticule = d3.geoGraticule()
+            .step([5, 5]); //place graticule lines every 5 degrees of longitude and latitude
+
+        //create graticule lines
+        var gratLines = map.selectAll(".gratLines") //select graticule elements that will be created
+            .data(graticule.lines()) //bind graticule lines to each element to be created
+            .enter() //create an element for each datum
+            .append("path") //append each element to the svg as a path element
+            .attr("class", "gratLines") //assign class for styling
+            .attr("d", path); //project graticule lines
+
+
+        //Example 2.6 line 5...create graticule lines
+        var gratLines = map.selectAll(".gratLines") //select graticule elements that will be created
+            .data(graticule.lines()) //bind graticule lines to each element to be created
+            .enter() //create an element for each datum
+            .append("path") //append each element to the svg as a path element
+            .attr("class", "gratLines") //assign class for styling
+            .attr("d", path); //project graticule lines
+
+
+
         console.log("pop vote data:",pop_Vote);
         console.log("lakes data:", lakes);
         console.log("states data:", states);
@@ -75,13 +99,13 @@ function setMap() {
         
         //add states to map
         var lakesPath = map.append("path")
-            .datum(topojson.feature(lakes, lakes.objects.great_lakes_01))
+            .datum(lakesFeature)
             .attr("class", "lakes")
             .attr("d", path);
 
          //add France regions to map
          var statesPath = map.selectAll(".states")
-            .data(topojson.feature(states, states.objects.US_States_01).features)
+            .data(statesFeature)
             .enter()
             .append("path")
             .attr("class", "states")
