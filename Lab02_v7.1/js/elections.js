@@ -142,6 +142,13 @@
                 return "bar " + d.state;
             })
             .attr("width", chartInnerWidth / pop_Vote.length - 1)
+            .on("mouseover", function(event, d){
+                console.log("Mouseover event on: ", d)
+                highlight(d);
+            })
+            .on("mouseout", function(event, d){
+                dehighlight(d);
+            })
             .attr("x", function(d, i){
                 return i * (chartInnerWidth / pop_Vote.length) + leftPadding;
             })
@@ -154,6 +161,10 @@
             .style("fill", function(d){
                 return colorScale(d[expressed]);
             });
+
+        //below Example 2.2 line 31...add style descriptor to each rect
+        var desc = bars.append("desc")
+            .text('{"stroke": "none", "stroke-width": "0px"}')
 
         //create a text element for the chart title
         var chartTitle = chart.append("text")
@@ -210,11 +221,11 @@
 
     // Joins the pop_Vote CSV and the US_States_04 TopoJSON
     function joinData(statesFeature, pop_Vote) {
-        // Loop through CSV to assign each set of CSV attribute values to TopoJSON region
+        // Loop through CSV to assign each set of CSV attribute values to TopoJSON state
         pop_Vote.forEach(function(csvState) {
             var csvKey = csvState.state; // The CSV primary key
 
-            // Loop through TopoJSON regions to find the correct region
+            // Loop through TopoJSON states to find the correct region
             statesFeature.forEach(function(topojsonFeature) {
                 var topojsonProps = topojsonFeature.properties; // The current region TopoJSON properties
                 var topojsonKey = topojsonProps.STUSPS; // The TopoJSON primary key
@@ -242,7 +253,7 @@
             .enter()
             .append("path")
             .attr("class", function(d){
-                return "regions " + d.properties.states;
+                return "states " + d.properties.states;
             })
             .attr("d", path)        
             .style("fill", function(d){            
@@ -250,9 +261,20 @@
                 if(value) {                
                     return colorScale(d.properties[expressed]);            
                 } else {                
-                    return "#ccc";            
-                }    
-        });
+                    return "#ccc";           
+                }
+            })
+            .on("mouseover", function(event, d){
+                highlight(d.properties);
+            })
+            .on("mouseout", function(event, d){
+                dehighlight(d.properties);
+            });
+        
+        
+        //dehighlight features
+        var desc = statesPath.append("desc")
+            .text('{"stroke": "#000", "stroke-width": "0.5px"}');
     }
 
 
@@ -381,6 +403,40 @@
         var chartTitle = d3.select(".chartTitle")
             .text("Votes for " + extracted + " in each State");
     };
+
+
+    //function to highlight enumeration units and bars
+    function highlight(props){
+        //change stroke
+        var selected = d3.selectAll("." + props.states)
+            .style("stroke", "blue")
+            .style("stroke-width", "2");
+    };
+
+
+
+    //function to reset the element style on mouseout
+    function dehighlight(props){
+        var selected = d3.selectAll("." + props.states)
+            .style("stroke", function(){
+                return getStyle(this, "stroke")
+            })
+            .style("stroke-width", function(){
+                return getStyle(this, "stroke-width")
+            });
+
+        function getStyle(element, styleName){
+            var styleText = d3.select(element)
+                .select("desc")
+                .text();
+
+            var styleObject = JSON.parse(styleText);
+
+            return styleObject[styleName];
+        };
+    };
+
+
 // ON USER SELECTION:
 // Step 1. Change the expressed attribute
 // Step 2. Recreate the color scale with new class breaks
