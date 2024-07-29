@@ -139,13 +139,13 @@
                 return b[expressed]-a[expressed]
             })
             .attr("class", function(d){
-                return "bar " + d.state;
+                return "bar " + d.states;
             })
             .attr("width", chartInnerWidth / pop_Vote.length - 1)
             .on("mouseover", function(event, d){
                 console.log("Mouseover event on: ", d)
                 highlight(d);
-            })
+            }) 
             .on("mouseout", function(event, d){
                 dehighlight(d);
             })
@@ -265,6 +265,7 @@
                 }
             })
             .on("mouseover", function(event, d){
+                console.log("Mouseover event on: ", d.properties)
                 highlight(d.properties);
             })
             .on("mouseout", function(event, d){
