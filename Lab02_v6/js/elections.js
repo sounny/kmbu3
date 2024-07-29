@@ -4,7 +4,7 @@
     //pseudo-global variables
     var attrArray = ["pop_vote_Biden", "pop_vote_Trump", "pop_vote_all_others", "total_vote", "over_18_total"]; //list of attributes
     var expressed = attrArray[0]; //initial attribute
-
+    var extracted = expressed.substring(9, 14);
 
     window.onload = setMap();
 
@@ -152,10 +152,10 @@
 
         //create a text element for the chart title
         var chartTitle = chart.append("text")
-            .attr("x", 40)
+            .attr("x", 75)
             .attr("y", 40)
             .attr("class", "chartTitle")
-            .text("Voters for " + expressed[9] + " in each region");
+            .text("Voters for " + extracted + " in each state");
 
         //create vertical axis generator
         var yAxis = d3.axisLeft()
