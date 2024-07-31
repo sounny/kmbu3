@@ -1,5 +1,22 @@
 /*Add CSS styles here*/
 
+
+/*title*/
+h1.title {
+    font-size: 50px;
+    color: whitesmoke;
+}
+
+
+body {
+    background: rgb(11,0,236);
+    background: linear-gradient(90deg, rgba(11,0,236,1) 47%, rgba(0,0,0,1) 100%);
+}
+
+
+
+
+/*axis*/
 .axis path,
 .axis line {
     fill: none;
@@ -29,8 +46,8 @@
 
 .states {
     fill: #CCC;
-    stroke: #615e5e;
-    stroke-width: 2px;
+    stroke: #020202;
+    stroke-width: 0.5px;
 }
 
 .gratLines {
@@ -107,7 +124,7 @@ body {
 /*dropdown*/
 .dropdown {
     position: absolute;
-    top: 30px;
+    top: 150px;
     left: 40px;
     z-index: 10;
     font-family: sans-serif;
@@ -124,7 +141,7 @@ option {
 
 /*info lables*/
 .infolabel {    margin: 0 20px 0 0;    position: absolute;
-    height: 50px;
+    height: 63px;
     min-width: 100px;
     color: #fff;
     background-color: #000;
@@ -139,3 +156,33 @@ option {
     display: inline-block;
     line-height: 1em;
 }
+
+/*svg elements*/
+.container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.map-container, .chart-container {
+    display: flex;
+    margin: 10px;
+    align-items: left;
+}
+
+/*text*/
+.text {
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 15px;
+    color: whitesmoke;
+}
+
+.first {
+    margin-bottom: 20px;
+}
+
+.second, .third, .fourth, .fifth, .sixth, .seventh {
+    margin-top: 10px; 
+    margin-bottom: 20px; 
+}
+
+

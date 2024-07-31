@@ -4,7 +4,7 @@
     //pseudo-global variables
     var attrArray = ["pop_vote_Biden", "pop_vote_Trump", "pop_vote_all_others", "total_vote", "over_18_total"]; //list of attributes
     var expressed = attrArray[0]; //initial attribute
-    var extracted = expressed.substring(9, 14);
+    //var extracted = expressed.substring(9, 14);
 
 
     //chart frame dimensions
@@ -20,22 +20,21 @@
     //create a scale to size bars proportionally to frame and for axis
     var yScale = d3.scaleLinear()
         .range([463, 0])
-        .domain([0, 1000000]); //for total pop needs to go as high as 35000000
+        .domain([0, 35000000]); //for total pop needs to go as high as 35000000
 
 
 
     window.onload = setMap();
 
+
     //set up map
     function setMap() {
-            
-        //map frame dimensions
         //map frame dimensions
         var width = window.innerWidth * 0.5,
             height = 460;
 
         //create new svg container for the map
-        var map = d3.select("body")
+        var map = d3.select(".map-container")
             .append("svg")
             .attr("class", "map")
             .attr("width", width)
@@ -81,9 +80,8 @@
 
             //translate TopoJSON
             var lakesFeature = topojson.feature(lakes, lakes.objects.great_lakes_01),
-            statesFeature = topojson.feature(states, states.objects.US_States_04).features;
+                statesFeature = topojson.feature(states, states.objects.US_States_04).features;
         
-            console.log(statesFeature);
 
             //sets graticules
             setGraticule(map, path);
@@ -109,7 +107,7 @@
 
             //adds dropdown
             createDropdown(pop_Vote);
-
+           
         };
     }; //end of setMap()
         
@@ -122,10 +120,11 @@
         var maxValue = d3.max(pop_Vote, function(d) {
             return +d[expressed];
         });
-        var cappedMaxValue = Math.min(maxValue, 35000000);
+        var padding = maxValue * 0.1;
+        var cappedMaxValue = Math.min(maxValue + padding, 35000000);
 
         //create a second svg element to hold the bar chart
-        var chart = d3.select("body")
+        var chart = d3.select(".chart-container")
             .append("svg")
             .attr("width", chartWidth)
             .attr("height", chartHeight)
@@ -191,7 +190,8 @@
             .attr("x", 75)
             .attr("y", 40)
             .attr("class", "chartTitle")
-            .text("Voters for " + extracted + " in each state");
+            .attr("fill", "white")
+            .text("Votes by State");
 
         //create vertical axis generator
         var yAxis = d3.axisLeft()
@@ -286,7 +286,6 @@
                 }
             })
             .on("mouseover", function(event, d){
-                console.log("Mouseover event on: ", d.properties)
                 highlight(d.properties);
             })
             .on("mouseout", function(event, d){
@@ -373,7 +372,8 @@
         var maxValue = d3.max(pop_Vote, function(d) {
             return +d[expressed];
         });
-        var cappedMaxValue = Math.min(maxValue, 35000000);
+        var padding = maxValue * 0.1;
+        var cappedMaxValue = Math.min(maxValue + padding, 35000000);
 
         //recreate the color scale
         var colorScale = makeColorScale(pop_Vote);
@@ -401,6 +401,7 @@
                 return i * 20
             })
             .duration(500);
+            
 
         updateChart(bars, pop_Vote.length, colorScale, cappedMaxValue);
     
@@ -419,7 +420,7 @@
 
         // Update the Y-axis scale
         yScale = newYScale;
-    
+
     }; //end of changeAttribute()
 
 
@@ -435,15 +436,6 @@
         bars.attr("x", function(d, i){
                 return i * (chartInnerWidth / n) + leftPadding;
             })
-            /*
-            //size/resize bars
-            .attr("height", function(d, i){
-                return 463 - yScale(parseFloat(d[expressed]));
-            })
-            .attr("y", function(d, i){
-                return yScale(parseFloat(d[expressed])) + topBottomPadding;
-            })
-            */
             //Size/resize bars (chatGPT generated)
             .attr("height", function(d) {
                 return chartInnerHeight - yScale(parseFloat(d[expressed]));
@@ -463,8 +455,12 @@
         });
         //add text to chart title
         var chartTitle = d3.select(".chartTitle")
-            .text("Votes for " + extracted + " in each State");
-    };
+            .text("Votes by State");
+
+
+
+
+    };//end of updateChart
 
 
     //function to highlight enumeration units and bars
@@ -472,7 +468,7 @@
         //change stroke
         var affected = props.state || props.STUSPS;
         var selected = d3.selectAll("." + affected)
-            .style("stroke", "blue")
+            .style("stroke", "yellow")
             .style("stroke-width", "2");
         setLabel(props);
 
@@ -519,9 +515,10 @@
             .attr("id", props.state + "_label")
             .html(labelAttribute);
 
-        var regionName = infolabel.append("div")
+        var stateName = infolabel.append("div")
             .attr("class", "labelname")
-            .html(props.name);
+            .html(props.name)
+            .html(props.state)
     };
 
 
@@ -548,7 +545,6 @@
             .style("left", x + "px")
             .style("top", y + "px");
     };
-
 
 
 
